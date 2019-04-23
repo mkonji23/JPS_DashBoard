@@ -7,6 +7,7 @@ public class Bbs {
 	private String bbsDate;
 	private String bbsContent;
 	private int bbsAvailable;
+
 	
 	public int getBbsID() {
 		return bbsID;
@@ -14,6 +15,7 @@ public class Bbs {
 	public void setBbsID(int bbsID) {
 		this.bbsID = bbsID;
 	}
+
 	public String getBbsTitle() {
 		return bbsTitle;
 	}

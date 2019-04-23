@@ -1,9 +1,14 @@
+<%@page import="java.net.URLEncoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 
     pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import ="bbs.Bbs" %>
 <%@ page import ="bbs.BbsDAO" %>
+<%@ page import = "java.io.File" %>
+<%@ page import = "file.FileDTO" %>
+<%@ page import = "file.FileDAO" %>
+<%@ page import = "java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +43,10 @@
  			
  		}
  		Bbs bbs = new BbsDAO().getBbs(bbsID);
+ 		
+ 
+ 		
+	
  	%>
  <!-- 네비게이션  -->
  <nav class="navbar navbar-default">
@@ -87,7 +96,8 @@
 
   </div> 
  </nav>
- 	<% if(userID != null) {%>
+ 	<% if(userID != null) {
+ 			ArrayList<FileDTO> fileList = new FileDAO().getList(bbsID); %>
  <div class = "container">
  	<div class ="row">
  	
@@ -113,7 +123,15 @@
 	 				
  					<tr>
 	 					<td>글 내용</td>
-	 					<td colspan="2" style="min-height:200px; text-align : left;"><%= bbs.getBbsContent().replaceAll(" ","&nbsp;").replaceAll("<", "&lt").replaceAll(">", "&gt").replaceAll("\n","<br>") %></td>
+	 					<td colspan="2" style="min-height:400px; height:400px; text-align : left;"><%= bbs.getBbsContent().replaceAll(" ","&nbsp;").replaceAll("<", "&lt").replaceAll(">", "&gt").replaceAll("\n","<br>") %></td>
+	 				</tr>
+	 				<tr>
+	 					<td>파일 다운로드</td>
+	 					<td colspan="2" ><%	for(FileDTO file : fileList)
+	 					{
+	 						out.write("<a href =\"" +request.getContextPath()+"/downloadAction?file="+URLEncoder.encode(file.getFileRealName(),"UTF-8")+
+	 									"\">"+ file.getFileName()+"(다운로드횟수: "+file.getDownloadCount()+")"+"</a><br>");
+	 					} %><td>
 	 				</tr>
 	 			</tbody>
 	 		

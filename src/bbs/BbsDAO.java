@@ -12,7 +12,6 @@ public class BbsDAO {
 
 		private Connection conn; // connection:db에접근하게 해주는 객체
 		private ResultSet rs;
-
 		// mysql에 접속해 주는 부분
 
 		public BbsDAO() { // 생성자 실행될때마다 자동으로 db연결이 이루어 질 수 있도록함
@@ -49,9 +48,10 @@ public class BbsDAO {
 		
 		public int write(String bbsTitle, String userID, String bbsContent) {
 			String SQL = "INSERT INTO BBS VALUES(?,?,?,?,?,?)";
+			int next = getNext();
 			try {
 				PreparedStatement pstmt = conn.prepareStatement(SQL);
-				pstmt.setInt(1, getNext());
+				pstmt.setInt(1, next);
 				pstmt.setString(2, bbsTitle);
 				pstmt.setString(3, userID);
 				pstmt.setString(4, getDate());

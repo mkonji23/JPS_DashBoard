@@ -46,8 +46,17 @@
 			script.println("</script>");	
 		}
 		else{
-		
-			if (bbs.getBbsTitle() == null || bbs.getBbsContent() == null ){
+			String directory ="C:/JSP/upload/"; 
+			int maxSize = 1024* 1024 * 100;
+			String encoding = "UTF-8";
+			
+			MultipartRequest multipartRequest 
+			= new MultipartRequest(request, directory, maxSize, encoding, new DefaultFileRenamePolicy());
+			
+			String bbsTitle = multipartRequest.getParameter("bbsTitle");
+			String bbsContent = multipartRequest.getParameter("bbsContent");
+			
+				if (bbsTitle == null || bbsContent == null ){
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
 					script.println("alert('입력이 안 된 사항이 있습니다.')");
@@ -55,13 +64,31 @@
 					script.println("</script>");
 	
 				} else{
-	
-				BbsDAO bbsDAO = new BbsDAO(); //인스턴스생성
-				int result = bbsDAO.write(bbs.getBbsTitle(), userID, bbs.getBbsContent());		
+					
+					BbsDAO bbsDAO = new BbsDAO(); //인스턴스생성
+					//글쓰기 성공
+					
+					int result = bbsDAO.write(multipartRequest.getParameter("bbsTitle"), userID, multipartRequest.getParameter("bbsContent"));		
+					
+					Enumeration fileNames = multipartRequest.getFileNames();
+					
+					while(fileNames.hasMoreElements()){
+						String parameter = (String)fileNames.nextElement();
+						String fileName = multipartRequest.getOriginalFileName(parameter);
+						String fileRealName = multipartRequest.getFilesystemName(parameter);
+						
+						if(fileName ==null)continue;
+						if(!fileName.endsWith(".doc") && !fileName.endsWith(".hwp")
+								&& !fileName.endsWith(".pdf") && !fileName.endsWith(".xls")){
+							File file  = new File(directory + fileRealName);
+							file.delete();
+							out.write("업로드 할 수 없는 확장자입니다.<br>");
+						} else{		
+							new FileDAO().upload(fileName, fileRealName);
+					
+						}
+					}
 				
-				
-				
-									
 				if(result == -1){ // 아이디가 기본키기. 중복되면 오류.
 					PrintWriter script = response.getWriter();
 					script.println("<script>");

@@ -68,7 +68,8 @@
 				} else{ //정상 입력
 	
 					BbsDAO bbsDAO = new BbsDAO(); //인스턴스생성
-					int result = bbsDAO.update(bbsID, request.getParameter("bbsTitle"), request.getParameter("bbsContent"));				
+					int result = bbsDAO.update(bbsID, request.getParameter("bbsTitle"), request.getParameter("bbsContent"));	
+					
 				if(result == -1){ // 아이디가 기본키기. 중복되면 오류.
 					PrintWriter script = response.getWriter();
 					script.println("<script>");

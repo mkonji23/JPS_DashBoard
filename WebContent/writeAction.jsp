@@ -50,6 +50,17 @@
 			int maxSize = 1024* 1024 * 100;
 			String encoding = "UTF-8";
 			
+			//파일 디렉토리가 없을시에 파일 디렉토리 생성
+			File Folder = new File(directory);
+			if (!Folder.exists()) {
+				try{
+				    Folder.mkdir(); //폴더 생성합니다.
+			        } 
+			        catch(Exception e){
+				    e.getStackTrace();
+				}        
+	         }
+			
 			MultipartRequest multipartRequest 
 			= new MultipartRequest(request, directory, maxSize, encoding, new DefaultFileRenamePolicy());
 			
@@ -78,7 +89,7 @@
 						String fileRealName = multipartRequest.getFilesystemName(parameter);
 						
 						if(fileName ==null)continue;
-						if(!fileName.endsWith(".doc") && !fileName.endsWith(".hwp")
+						if(!fileName.endsWith(".doc") && !fileName.endsWith(".hwp")&& !fileName.endsWith(".zip")&& !fileName.endsWith(".docx")
 								&& !fileName.endsWith(".pdf") && !fileName.endsWith(".xls")){
 							File file  = new File(directory + fileRealName);
 							file.delete();
